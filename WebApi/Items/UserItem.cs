@@ -1,4 +1,4 @@
-﻿namespace WebApi
+﻿namespace WebApi.Items
 {
     public class UserItem
     {

@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +15,13 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
     {
         options.User.RequireUniqueEmail = true;
         options.Password.RequiredLength = 10;
+
+        //REMOVE BEFORE FINAL 
+        //options.Password.RequireDigit = false;
+        //options.Password.RequireLowercase = false;
+        //options.Password.RequireNonAlphanumeric = false;
+        //options.Password.RequireUppercase = false;
+
     }).AddRoles<IdentityRole>()
     .AddDapperStores(options =>
     {
@@ -33,14 +39,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseAuthorization();
 app.MapControllers();
 app.MapGroup("/account").MapIdentityApi<IdentityUser>();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
-app.MapControllers();
-
 app.Run();
