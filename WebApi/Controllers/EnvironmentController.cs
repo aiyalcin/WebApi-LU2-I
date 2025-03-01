@@ -7,7 +7,7 @@ using WebApi.Items;
 namespace WebApi.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("/environments")]
     public class EnvironmentController : Controller
     {
@@ -29,6 +29,12 @@ namespace WebApi.Controllers
         public async Task<EnvironmentItem?> ReadEnvironmentAsync(string id)
         {
             return await _environmentRepo.ReadEnvironmentAsync(id);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<EnvironmentItem>> ReadAllEnvironmentsAsync()
+        {
+            return await _environmentRepo.ReadAllEnvironmentsAsync();
         }
 
     }

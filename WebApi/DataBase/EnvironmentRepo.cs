@@ -39,5 +39,14 @@ namespace WebApi.DataBase
                 return environment;
             }
         }
+        public async Task<IEnumerable<EnvironmentItem>> ReadAllEnvironmentsAsync()
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "SELECT Id, Name, MaxHeight, MaxLength AS MaxLength, Username FROM Environments2D";
+                var environments = await connection.QueryAsync<EnvironmentItem>(query);
+                return environments;
+            }
+        }
     }
 }

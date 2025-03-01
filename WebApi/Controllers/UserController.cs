@@ -22,6 +22,7 @@ namespace WebApi.Controllers
         public async Task SaveUser(UserItem user)
         {
             await userRepo.SaveUser(user);
+            Console.WriteLine("User saved");
             Ok();
         }
 
