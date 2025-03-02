@@ -4,8 +4,8 @@
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public float MaxHeight { get; set; }
-        public float MaxLength { get; set; }
-        public string Username { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
+        public string UserId { get; set; }
     }
 }

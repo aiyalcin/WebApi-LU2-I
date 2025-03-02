@@ -7,16 +7,18 @@ using WebApi.Items;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("/environments")]
     public class EnvironmentController : Controller
     {
         private readonly string _connectionString;
         private readonly EnvironmentRepo _environmentRepo;
-        public EnvironmentController(IConfiguration configuration)
+        private readonly ILogger<EnvironmentRepo> _logger;
+        public EnvironmentController(IConfiguration configuration, ILogger<EnvironmentRepo> logger)
         {
-            _connectionString = configuration.GetConnectionString("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
-            _environmentRepo = new EnvironmentRepo(configuration);
+            _connectionString = configuration.GetConnectionString("ConnectionString1") 
+                                ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
+            _environmentRepo = new EnvironmentRepo(configuration, logger);
         }
 
         [HttpPost]
@@ -25,17 +27,18 @@ namespace WebApi.Controllers
             _environmentRepo.SaveEnvironment(environment);
         }
 
-        [HttpGet("{id}")]
-        public async Task<EnvironmentItem?> ReadEnvironmentAsync(string id)
+        [HttpGet("{email}")]
+        public async Task<List<EnvironmentItem?>> ReadEnvironmentsAsync(string email)
         {
-            return await _environmentRepo.ReadEnvironmentAsync(id);
+            return await _environmentRepo.ReadEnvironmentsAsync(email);
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<EnvironmentItem>> ReadAllEnvironmentsAsync()
+        [HttpGet("{email}/{worldName}")]
+        public async Task<EnvironmentItem?> ReadEnvironmentAsync(string email, string worldName)
         {
-            return await _environmentRepo.ReadAllEnvironmentsAsync();
+            return await _environmentRepo.ReadEnvironmentAsync(email, worldName);
         }
+
 
     }
 }

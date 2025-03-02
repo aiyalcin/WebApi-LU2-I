@@ -18,13 +18,6 @@ namespace WebApi.Controllers
             _connectionString = configuration.GetConnectionString("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString1' not found.");
             userRepo = new UserRepo(configuration);
         }
-        [HttpPost]
-        public async Task SaveUser(UserItem user)
-        {
-            await userRepo.SaveUser(user);
-            Console.WriteLine("User saved");
-            Ok();
-        }
 
         [HttpDelete]
         public async Task DeleteUser(string username)
