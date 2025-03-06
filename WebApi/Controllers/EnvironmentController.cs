@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task SaveEnvironment(EnvironmentItem environment)
         {
-            _environmentRepo.SaveEnvironment(environment);
+            await _environmentRepo.SaveEnvironment(environment);
         }
 
         [HttpGet("{email}")]

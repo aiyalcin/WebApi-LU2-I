@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApi.DataBase;
 using WebApi.Items;
 
@@ -18,13 +19,20 @@ namespace WebApi.Controllers
             _connectionString = configuration.GetConnectionString("ConnectionString1")
                                 ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
             _environmentRepo = new EnvironmentRepo(configuration, logger);
+            _tilesRepo = new TilesRepo(configuration);
         }
 
         //get all tiles in an environment
         [HttpGet("{EnvironmentId}")]
-        public async Task<List<Tile2D?>> ReadTilesAsync(string EnvironmentId)
+        public async Task<List<Tile2DItem?>> ReadTilesAsync(string EnvironmentId)
         {
             return await _tilesRepo.ReadTilesAsync(EnvironmentId);
+        }
+
+        [HttpPost]
+        public async Task SaveTile(Tile2DItem tile)
+        {
+            await _tilesRepo.SaveTile(tile);
         }
     }
 }

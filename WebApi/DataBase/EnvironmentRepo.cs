@@ -19,14 +19,16 @@ namespace WebApi.DataBase
             using (var connection1 = new SqlConnection(_connectionString))
             {
                 connection1.Open();
+                var query1 = "SELECT Id FROM auth.AspNetUsers WHERE UserName = @userName";
+                var userId = await connection1.QuerySingleOrDefaultAsync<string>(query1, new { userName = environment.UserName });
                 using (var command = connection1.CreateCommand())
                 {
-                    command.CommandText = "INSERT INTO Environments2D (Id, Name, Height, Width, UserId) VALUES (@Id, @Name, @Height, @Length, @UserId)";
-                    command.Parameters.AddWithValue("@Id", environment.Id);
-                    command.Parameters.AddWithValue("@Name", environment.Name);
+                    command.CommandText = "INSERT INTO Environments2D (WorldName, Username, Height, Width, UserId) VALUES (@WorldName, @Username, @Height, @Width, @UserId)";
+                    command.Parameters.AddWithValue("@WorldName", environment.WorldName);
+                    command.Parameters.AddWithValue("@Username", environment.UserName);
                     command.Parameters.AddWithValue("@Height", environment.Height);
                     command.Parameters.AddWithValue("@Width", environment.Width);
-                    command.Parameters.AddWithValue("@UserId", environment.UserId);
+                    command.Parameters.AddWithValue("@UserId", userId);
                     command.ExecuteNonQuery();
                 }
                 connection1.Close();

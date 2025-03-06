@@ -7,7 +7,7 @@ namespace WebApi.DataBase
     public class TilesRepo
     {
         private readonly string _connectionString;
-        private List<Tile2D> WorldTiles;
+        private List<Tile2DItem> WorldTiles;
 
         public TilesRepo(IConfiguration configuration)
         {
@@ -15,7 +15,7 @@ namespace WebApi.DataBase
                                 throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
         }
 
-        public async Task<List<Tile2D?>> ReadTilesAsync(string environmentId)
+        public async Task<List<Tile2DItem?>> ReadTilesAsync(string environmentId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -27,22 +27,40 @@ namespace WebApi.DataBase
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {
-                        var tiles = new List<Tile2D>();
+                        var tiles = new List<Tile2DItem>();
                         while (await reader.ReadAsync())
                         {
-                            var tile = new Tile2D
+                            var tile = new Tile2DItem
                             {
                                 Id = reader["Id"].ToString(),
                                 TileName = reader["TileName"].ToString(),
                                 PositionX = Convert.ToInt32(reader["PositionX"]),
                                 PositionY = Convert.ToInt32(reader["PositionY"]),
-                                EnvironmentID = reader["EnvironmentID"].ToString()
+                                EnvironmentName = reader["EnvironmentID"].ToString()
                             };
                             tiles.Add(tile);
                         }
 
                         return tiles;
                     }
+                }
+            }
+        }
+
+        public async Task SaveTile(Tile2DItem tile)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var query = "INSERT INTO Tile2D (Id, TileName, PositionX, PositionY, EnvironmentName) VALUES (@Id, @TileName, @PositionX, @PositionY, @EnvironmentName)";
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", tile.Id);
+                    command.Parameters.AddWithValue("@TileName", tile.TileName);
+                    command.Parameters.AddWithValue("@PositionX", tile.PositionX);
+                    command.Parameters.AddWithValue("@PositionY", tile.PositionY);
+                    command.Parameters.AddWithValue("@EnvironmentName", tile.EnvironmentName);
+                    await command.ExecuteNonQueryAsync();
                 }
             }
         }
