@@ -14,6 +14,12 @@ namespace WebApi.Controllers
         private readonly EnvironmentRepo _environmentRepo;
         private readonly TilesRepo _tilesRepo;
         private readonly ILogger<EnvironmentRepo> _logger;
+
+        public class Tile2DItemList
+        {
+            public List<Tile2DItem> Tiles { get; set; }
+        }
+
         public TilesController(IConfiguration configuration, ILogger<EnvironmentRepo> logger)
         {
             _connectionString = configuration.GetConnectionString("ConnectionString1")
@@ -30,9 +36,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task SaveTile(Tile2DItem tile)
+        public async Task SaveTiles([FromBody] Tile2DItemList tileList)
         {
-            await _tilesRepo.SaveTile(tile);
+            await _tilesRepo.SaveTiles(tileList.Tiles);
         }
     }
 }

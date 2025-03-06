@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Dapper;
 using Microsoft.Data.SqlClient;
 using WebApi.Items;
 
@@ -47,23 +48,40 @@ namespace WebApi.DataBase
             }
         }
 
-        public async Task SaveTile(Tile2DItem tile)
+        public async Task SaveTiles(List<Tile2DItem> tiles)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                var query = "INSERT INTO Tile2D (Id, TileName, PositionX, PositionY, EnvironmentName) VALUES (@Id, @TileName, @PositionX, @PositionY, @EnvironmentName)";
-                using (var command = new SqlCommand(query, connection))
+                using (var transaction = connection.BeginTransaction())
                 {
-                    command.Parameters.AddWithValue("@Id", tile.Id);
-                    command.Parameters.AddWithValue("@TileName", tile.TileName);
-                    command.Parameters.AddWithValue("@PositionX", tile.PositionX);
-                    command.Parameters.AddWithValue("@PositionY", tile.PositionY);
-                    command.Parameters.AddWithValue("@EnvironmentName", tile.EnvironmentName);
-                    await command.ExecuteNonQueryAsync();
+                    try
+                    {
+                        foreach (var tile in tiles)
+                        {
+                            var query = "INSERT INTO Tile2D (Id, TileName, PositionX, PositionY, EnvironmentName) VALUES (@Id, @TileName, @PositionX, @PositionY, @EnvironmentName)";
+                            await connection.ExecuteAsync(query, new
+                            {
+                                tile.Id,
+                                tile.TileName,
+                                tile.PositionX,
+                                tile.PositionY,
+                                tile.EnvironmentName
+                            }, transaction);
+                        }
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
+                connection.Close();
             }
         }
+
+
 
     }
 }
