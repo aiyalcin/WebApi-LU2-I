@@ -16,7 +16,7 @@ namespace WebApi.Controllers
         private readonly ILogger<EnvironmentRepo> _logger;
         public EnvironmentController(IConfiguration configuration, ILogger<EnvironmentRepo> logger)
         {
-            _connectionString = configuration.GetConnectionString("ConnectionString1") 
+            _connectionString = configuration.GetConnectionString("ConnectionString1")
                                 ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
             _environmentRepo = new EnvironmentRepo(configuration, logger);
         }
@@ -33,12 +33,10 @@ namespace WebApi.Controllers
             return await _environmentRepo.ReadEnvironmentsAsync(email);
         }
 
-        [HttpGet("{email}/{worldName}")]
+        [HttpGet("{email}/world/{worldName}")]
         public async Task<EnvironmentItem?> ReadEnvironmentAsync(string email, string worldName)
         {
             return await _environmentRepo.ReadEnvironmentAsync(email, worldName);
         }
-
-
     }
 }

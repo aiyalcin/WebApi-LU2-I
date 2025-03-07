@@ -39,10 +39,11 @@ namespace WebApi.DataBase
         {
             using (var connection = new SqlConnection(_connectionString))
             {
+                _logger.LogInformation("Getting MULTIPLEEE WOOOOORLD");
                 var query1 = "SELECT Id, UserName FROM auth.AspNetUsers WHERE UserName = @userName";
                 var user = await connection.QuerySingleOrDefaultAsync<UserItem>(query1, new { userName = userName });
                 _logger.LogInformation($"User: {user.Id}");
-                var query = "SELECT Id, Name, Height, Width AS Width FROM Environments2D WHERE UserId = @UserId";
+                var query = "SELECT WorldName, UserName, Height, Width AS Width FROM Environments2D WHERE UserId = @UserId";
                 var environments = (await connection.QueryAsync<EnvironmentItem>(query, new { userId = user.Id })).ToList();
                 return environments;
             }
@@ -51,13 +52,15 @@ namespace WebApi.DataBase
         {
             using (var connection = new SqlConnection(_connectionString))
             {
+                _logger.LogInformation("Getting 1 WOOOOORLD");
                 var query1 = "SELECT Id, UserName FROM auth.AspNetUsers WHERE UserName = @userName";
                 var user = await connection.QuerySingleOrDefaultAsync<UserItem>(query1, new { userName = userName });
                 _logger.LogInformation($"User: {user.Id}");
-                var query = $"SELECT Id, Name, Height, Width AS Width FROM Environments2D WHERE UserId = @UserId AND Name = @Name";
-                var environment = await connection.QuerySingleOrDefaultAsync<EnvironmentItem>(query, new { userId = user.Id, Name = worldName });
+                var query = "SELECT WorldName, Height, Width AS Width FROM Environments2D WHERE UserId = @UserId AND WorldName = @WorldName";
+                var environment = await connection.QuerySingleOrDefaultAsync<EnvironmentItem>(query, new { userId = user.Id, WorldName = worldName });
                 return environment;
             }
         }
+
     }
 }
