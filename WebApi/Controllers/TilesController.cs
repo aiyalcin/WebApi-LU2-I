@@ -6,7 +6,7 @@ using WebApi.Items;
 namespace WebApi.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("/tiles")]
     public class TilesController : Controller
     {
@@ -29,10 +29,10 @@ namespace WebApi.Controllers
         }
 
         //get all tiles in an environment
-        [HttpGet("{EnvironmentId}")]
-        public async Task<List<Tile2DItem?>> ReadTilesAsync(string EnvironmentId)
+        [HttpGet("{WorldId}")]
+        public async Task<List<Tile2DItem?>> ReadTilesAsync(string WorldId)
         {
-            return await _tilesRepo.ReadTilesAsync(EnvironmentId);
+            return await _tilesRepo.ReadTilesAsync(WorldId);
         }
 
         [HttpPost]

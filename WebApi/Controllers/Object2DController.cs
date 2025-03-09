@@ -5,31 +5,28 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
 using WebApi.DataBase;
 using WebApi.Items;
+using static WebApi.Controllers.TilesController;
 
 namespace WebApi.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("/prefabs")]
-    public class PrefabController : Controller
+    public class Object2DController : Controller
     {
         private readonly string _connectionString;
-        private readonly PrefabRepo _prefabRepo;
-        public PrefabController(IConfiguration configuration)
+        private readonly Object2DRepo _object2DRepo;
+        private List<Object2DItem> _object2DItems;
+        public Object2DController(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
-            _prefabRepo = new PrefabRepo(configuration);
+            _object2DRepo = new Object2DRepo(configuration);
         }
-        [HttpPost]
-        public async Task SaveItem(PrefabItem item)
-        {
-            await _prefabRepo.SaveItem(item);
-        }
+        //[HttpPost]
+        //public async Task SaveItem([FromBody] _object2DItems tileList item)
+        //{
+        //    await _object2DRepo.SaveItem(item);
+        //}
 
-        [HttpGet("{Id}")]
-        public async Task<PrefabItem?> ReadItemsAsnyc(string Id)
-        {
-            return await _prefabRepo.ReadItemsAsnyc(Id);
-        }
     }
 }

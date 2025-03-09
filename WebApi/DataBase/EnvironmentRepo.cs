@@ -23,12 +23,13 @@ namespace WebApi.DataBase
                 var userId = await connection1.QuerySingleOrDefaultAsync<string>(query1, new { userName = environment.Username });
                 using (var command = connection1.CreateCommand())
                 {
-                    command.CommandText = "INSERT INTO Environments2D (WorldName, Username, Height, Width, UserId) VALUES (@WorldName, @Username, @Height, @Width, @UserId)";
-                    command.Parameters.AddWithValue("@WorldName", environment.WorldName);
+                    command.CommandText = "INSERT INTO Environments2D (WorldName, Username, Height, Width, UserId, WorldId) VALUES (@WorldName, @Username, @Height, @Width, @UserId, @WorldId)";
                     command.Parameters.AddWithValue("@Username", environment.Username);
                     command.Parameters.AddWithValue("@Height", environment.Height);
                     command.Parameters.AddWithValue("@Width", environment.Width);
                     command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("WorldName", environment.WorldName);
+                    command.Parameters.AddWithValue("WorldId", environment.WorldId);
                     command.ExecuteNonQuery();
                 }
                 connection1.Close();
@@ -39,7 +40,6 @@ namespace WebApi.DataBase
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                _logger.LogInformation("Getting MULTIPLEEE WOOOOORLD");
                 var query1 = "SELECT Id, UserName FROM auth.AspNetUsers WHERE UserName = @userName";
                 var user = await connection.QuerySingleOrDefaultAsync<UserItem>(query1, new { userName = userName });
                 _logger.LogInformation($"User: {user.Id}");
@@ -52,11 +52,9 @@ namespace WebApi.DataBase
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                _logger.LogInformation("Getting 1 WOOOOORLD");
                 var query1 = "SELECT Id, UserName FROM auth.AspNetUsers WHERE UserName = @userName";
                 var user = await connection.QuerySingleOrDefaultAsync<UserItem>(query1, new { userName = userName });
-                _logger.LogInformation($"User: {user.Id}");
-                var query = "SELECT WorldName, Height, Width AS Width FROM Environments2D WHERE UserId = @UserId AND WorldName = @WorldName";
+                var query = "SELECT WorldId, WorldName, UserName, Height, Width AS Width FROM Environments2D WHERE UserId = @UserId AND WorldName = @WorldName";
                 var environment = await connection.QuerySingleOrDefaultAsync<EnvironmentItem>(query, new { userId = user.Id, WorldName = worldName });
                 return environment;
             }

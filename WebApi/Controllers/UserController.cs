@@ -7,7 +7,7 @@ using WebApi.Items;
 namespace WebApi.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("/users")]
     public class UserController : Controller
     {

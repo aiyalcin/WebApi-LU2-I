@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Items
 {
-    public class PrefabItem
+    public class Object2DItem
     {
         public string Id { get; set; }
         public int PrefabId { get; set; }
@@ -10,6 +10,6 @@
         public float ScaleY { get; set; }
         public float Rotation { get; set; }
         public int FloatingLayer { get; set; }
-        public string EnvironmentID { get; set; }
+        public string WorldId { get; set; }
     }
 }

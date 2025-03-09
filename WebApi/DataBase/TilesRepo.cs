@@ -16,15 +16,15 @@ namespace WebApi.DataBase
                                 throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
         }
 
-        public async Task<List<Tile2DItem?>> ReadTilesAsync(string environmentId)
+        public async Task<List<Tile2DItem?>> ReadTilesAsync(string WorldId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                var query = "SELECT * FROM Tiles WHERE EnvironmentId = @EnvironmentId";
+                var query = "SELECT * FROM Tile2D WHERE WorldId = @WorldId";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@EnvironmentId", environmentId);
+                    command.Parameters.AddWithValue("@WorldId", WorldId);
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {
@@ -37,11 +37,10 @@ namespace WebApi.DataBase
                                 TileName = reader["TileName"].ToString(),
                                 PositionX = Convert.ToInt32(reader["PositionX"]),
                                 PositionY = Convert.ToInt32(reader["PositionY"]),
-                                EnvironmentName = reader["EnvironmentID"].ToString()
+                                WorldId = reader["WorldId"].ToString()
                             };
                             tiles.Add(tile);
                         }
-
                         return tiles;
                     }
                 }
@@ -59,14 +58,14 @@ namespace WebApi.DataBase
                     {
                         foreach (var tile in tiles)
                         {
-                            var query = "INSERT INTO Tile2D (Id, TileName, PositionX, PositionY, EnvironmentName) VALUES (@Id, @TileName, @PositionX, @PositionY, @EnvironmentName)";
+                            var query = "INSERT INTO Tile2D (Id, TileName, PositionX, PositionY, WorldId) VALUES (@Id, @TileName, @PositionX, @PositionY, @WorldId)";
                             await connection.ExecuteAsync(query, new
                             {
                                 tile.Id,
                                 tile.TileName,
                                 tile.PositionX,
                                 tile.PositionY,
-                                tile.EnvironmentName
+                                tile.WorldId
                             }, transaction);
                         }
                         transaction.Commit();

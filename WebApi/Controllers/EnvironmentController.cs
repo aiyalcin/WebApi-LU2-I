@@ -7,7 +7,7 @@ using WebApi.Items;
 namespace WebApi.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("/environments")]
     public class EnvironmentController : Controller
     {
