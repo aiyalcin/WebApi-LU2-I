@@ -10,8 +10,8 @@ using static WebApi.Controllers.TilesController;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Authorize]
-    [Route("/prefabs")]
+    //[Authorize] DEBUG
+    [Route("/objects2d")]
     public class Object2DController : Controller
     {
         private readonly string _connectionString;
@@ -22,11 +22,21 @@ namespace WebApi.Controllers
             _connectionString = configuration.GetConnectionString("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
             _object2DRepo = new Object2DRepo(configuration);
         }
-        //[HttpPost]
-        //public async Task SaveItem([FromBody] _object2DItems tileList item)
-        //{
-        //    await _object2DRepo.SaveItem(item);
-        //}
+        public class Object2DItemList
+        {
+            public List<Object2DItem> objects2D { get; set; }
+        }
+        [HttpPost]
+        public async Task SaveObject2D([FromBody] Object2DItemList objects2D)
+        {
+            await _object2DRepo.SaveObject2D(objects2D.objects2D);
+        }
+
+        [HttpGet("{WorldId}")]
+        public async Task<List<Object2DItem?>> ReadObject2DAsync(string WorldId)
+        {
+            return await _object2DRepo.ReadObjectsAsnyc(WorldId);
+        }
 
     }
 }
