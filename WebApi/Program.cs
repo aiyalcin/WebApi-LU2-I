@@ -29,17 +29,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
+var sqlConnectionString = builder.Configuration.GetValue<string>("ConnectionString1");
+var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(sqlConnectionString);
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.MapGet("/", () => $"The API is up .Connection string found: {(sqlConnectionStringFound ? "Yes" : "No")}");
 app.MapControllers();
 app.MapGroup("/account").MapIdentityApi<IdentityUser>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
-var sqlConnectionString = builder.Configuration.GetValue<string>("SqlConnectionString");
-var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(sqlConnectionString);
-app.MapGet("/", () => $"The API is up .Connection string found: {(sqlConnectionStringFound? "Yes" : "No")}");
 app.Run();
