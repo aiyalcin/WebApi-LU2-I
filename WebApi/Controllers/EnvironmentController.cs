@@ -38,5 +38,17 @@ namespace WebApi.Controllers
         {
             return await _environmentRepo.ReadEnvironmentAsync(email, worldName);
         }
+
+        [HttpDelete("{WorldId}")]
+        public async Task DeleteEnvironment(string WorldId)
+        {
+            await _environmentRepo.DeleteEnvironment(WorldId);
+        }
+
+        [HttpGet("{email}/world/{worldName}/exists")]
+        public async Task<bool> CheckExits(string email, string worldName)
+        {
+            return await _environmentRepo.CheckExits(email, worldName);
+        }
     }
 }
