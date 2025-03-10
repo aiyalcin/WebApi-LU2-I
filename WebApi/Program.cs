@@ -43,4 +43,7 @@ app.MapControllers();
 app.MapGroup("/account").MapIdentityApi<IdentityUser>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
+var sqlConnectionString = builder.Configuration.GetValue<string>("SqlConnectionString");
+var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(sqlConnectionString);
+app.MapGet("/", () => $"The API is up .Connection string found: {(sqlConnectionStringFound? "" : "")}");
 app.Run();
