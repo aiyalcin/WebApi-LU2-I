@@ -15,12 +15,10 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
     {
         options.User.RequireUniqueEmail = true;
         options.Password.RequiredLength = 10;
-
-        //REMOVE BEFORE FINAL 
-        //options.Password.RequireDigit = false;
-        //options.Password.RequireLowercase = false;
-        //options.Password.RequireNonAlphanumeric = false;
-        //options.Password.RequireUppercase = false;
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
 
     }).AddRoles<IdentityRole>()
     .AddDapperStores(options =>
@@ -45,5 +43,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 var sqlConnectionString = builder.Configuration.GetValue<string>("SqlConnectionString");
 var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(sqlConnectionString);
-app.MapGet("/", () => $"The API is up .Connection string found: {(sqlConnectionStringFound? "" : "")}");
+app.MapGet("/", () => $"The API is up .Connection string found: {(sqlConnectionStringFound? "Yes" : "No")}");
 app.Run();
