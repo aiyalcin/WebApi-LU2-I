@@ -1,4 +1,4 @@
-﻿using Microsoft.Testing.Platform.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using WebApi.Controllers;
 using WebApi.DataBase;
@@ -10,13 +10,15 @@ namespace TestProjectWebApi
     public class EnvironmentControllerTests
     {
         private Mock<IEnvironmentRepo> _mockRepo;
+        private Mock<ILogger<EnvironmentController>> _mockLogger;
         private EnvironmentController _controller;
 
         [TestInitialize]
         public void Setup()
         {
             _mockRepo = new Mock<IEnvironmentRepo>();
-            _controller = new EnvironmentController(_mockRepo.Object);
+            _mockLogger = new Mock<ILogger<EnvironmentController>>();
+            _controller = new EnvironmentController(_mockRepo.Object, _mockLogger.Object);
         }
 
         [TestMethod]
@@ -54,6 +56,13 @@ namespace TestProjectWebApi
 
             // Assert
             Assert.IsTrue(result);
+            _mockLogger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Information),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("CheckExits called")),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
         }
 
         [TestMethod]
@@ -71,8 +80,13 @@ namespace TestProjectWebApi
 
             // Assert
             Assert.IsFalse(result);
+            _mockLogger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Information),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("CheckExits called")),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)), Times.Once);
         }
-
     }
-
 }

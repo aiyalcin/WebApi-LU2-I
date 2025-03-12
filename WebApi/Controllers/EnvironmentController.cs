@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using WebApi.DataBase;
 using WebApi.Items;
 
@@ -11,11 +11,13 @@ namespace WebApi.Controllers
     [Route("/environments")]
     public class EnvironmentController : Controller
     {
-        private readonly string _connectionString;
         private readonly IEnvironmentRepo _environmentRepo;
-        public EnvironmentController(IEnvironmentRepo repo)
+        private readonly ILogger<EnvironmentController> _logger;
+
+        public EnvironmentController(IEnvironmentRepo repo, ILogger<EnvironmentController> logger)
         {
-            _environmentRepo = repo; 
+            _environmentRepo = repo;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -45,6 +47,7 @@ namespace WebApi.Controllers
         [HttpGet("{email}/world/{worldName}/exists")]
         public async Task<bool> CheckExits(string email, string worldName)
         {
+            _logger.LogInformation("CheckExits called with email: {Email}, worldName: {WorldName}", email, worldName);
             return await _environmentRepo.CheckExits(email, worldName);
         }
     }
