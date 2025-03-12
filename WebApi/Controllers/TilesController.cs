@@ -12,20 +12,16 @@ namespace WebApi.Controllers
     {
         private readonly string _connectionString;
         private readonly EnvironmentRepo _environmentRepo;
-        private readonly TilesRepo _tilesRepo;
+        private readonly ITilesRepo _tilesRepo;
         private readonly ILogger<EnvironmentRepo> _logger;
-
         public class Tile2DItemList
         {
             public List<Tile2DItem> Tiles { get; set; }
         }
 
-        public TilesController(IConfiguration configuration, ILogger<EnvironmentRepo> logger)
+        public TilesController(ITilesRepo repo, ILogger<EnvironmentRepo> logger)
         {
-            _connectionString = configuration.GetValue<string>("ConnectionString1")
-                                ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
-            _environmentRepo = new EnvironmentRepo(configuration, logger);
-            _tilesRepo = new TilesRepo(configuration);
+            _tilesRepo = repo;
         }
 
         //get all tiles in an environment

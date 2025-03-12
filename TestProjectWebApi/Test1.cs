@@ -1,24 +1,19 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿
+using Microsoft.Testing.Platform.Logging;
 using Moq;
 using WebApi.Controllers;
 using WebApi.DataBase;
 using WebApi.Items;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-[TestClass]
-namespace ApiTestProject
+namespace TestProjectWebApi
 {
     [TestClass]
-    public class TilesControllerTests
+    public sealed class Test1
     {
         [TestMethod]
         public async Task ReadTilesAsync_ReturnsTiles()
         {
             // Arrange
-            var mockConfiguration = new Mock<IConfiguration>();
             var mockLogger = new Mock<ILogger<EnvironmentRepo>>();
             var mockTilesRepo = new Mock<ITilesRepo>();
             var worldId = "testWorldId";
@@ -26,7 +21,7 @@ namespace ApiTestProject
 
             mockTilesRepo.Setup(repo => repo.ReadTilesAsync(worldId)).ReturnsAsync(expectedTiles);
 
-            var controller = new TilesController(mockConfiguration.Object, mockLogger.Object, mockTilesRepo.Object);
+            var controller = new TilesController(mockLogger.Object);
 
             // Act
             var result = await controller.ReadTilesAsync(worldId);
@@ -68,7 +63,7 @@ namespace ApiTestProject
 
             mockTilesRepo.Setup(repo => repo.ReadTilesAsync(worldId)).ReturnsAsync(expectedTiles);
 
-            var controller = new TilesController(mockConfiguration.Object, mockLogger.Object, mockTilesRepo.Object);
+            var controller = new TilesController(mockConfiguration.Object, mockLogger.Object);
 
             // Act
             var result = await controller.ReadTilesAsync(worldId);

@@ -10,17 +10,14 @@ using static WebApi.Controllers.TilesController;
 namespace WebApi.Controllers
 {
     [ApiController]
-    //[Authorize] DEBUG
+    [Authorize]
     [Route("/objects2d")]
     public class Object2DController : Controller
     {
-        private readonly string _connectionString;
-        private readonly Object2DRepo _object2DRepo;
-        private List<Object2DItem> _object2DItems;
-        public Object2DController(IConfiguration configuration)
+        private readonly IObject2DRepo _object2DRepo;
+        public Object2DController(IObject2DRepo repo)
         {
-            _connectionString = configuration.GetValue<string>("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
-            _object2DRepo = new Object2DRepo(configuration);
+            _object2DRepo = repo;
         }
         public class Object2DItemList
         {

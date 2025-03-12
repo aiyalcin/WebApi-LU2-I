@@ -12,13 +12,11 @@ namespace WebApi.Controllers
     public class EnvironmentController : Controller
     {
         private readonly string _connectionString;
-        private readonly EnvironmentRepo _environmentRepo;
+        private readonly IEnvironmentRepo _environmentRepo;
         private readonly ILogger<EnvironmentRepo> _logger;
-        public EnvironmentController(IConfiguration configuration, ILogger<EnvironmentRepo> logger)
+        public EnvironmentController(IEnvironmentRepo repo, ILogger<EnvironmentRepo> logger)
         {
-            _connectionString = configuration.GetValue<string>("ConnectionString1")
-                                ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
-            _environmentRepo = new EnvironmentRepo(configuration, logger);
+            _environmentRepo = repo; 
         }
 
         [HttpPost]

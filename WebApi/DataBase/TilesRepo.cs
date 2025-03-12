@@ -5,7 +5,12 @@ using WebApi.Items;
 
 namespace WebApi.DataBase
 {
-    public class TilesRepo
+    public interface ITilesRepo
+    {
+        Task<List<Tile2DItem?>> ReadTilesAsync(string WorldId);
+        Task SaveTiles(List<Tile2DItem> tiles);
+    }
+    public class TilesRepo : ITilesRepo
     {
         private readonly string _connectionString;
         private List<Tile2DItem> WorldTiles;

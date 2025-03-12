@@ -4,7 +4,12 @@ using WebApi.Items;
 
 namespace WebApi.DataBase
 {
-    public class Object2DRepo
+    public interface IObject2DRepo
+    {
+        Task SaveObject2D(List<Object2DItem> objects);
+        Task<List<Object2DItem?>> ReadObjectsAsnyc(string WorldId);
+    }
+    public class Object2DRepo : IObject2DRepo
     {
         private readonly string _connectionString;
         public Object2DRepo(IConfiguration configuration)

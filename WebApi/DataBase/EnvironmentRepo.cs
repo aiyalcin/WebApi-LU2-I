@@ -5,7 +5,16 @@ using WebApi.Items;
 
 namespace WebApi.DataBase
 {
-    public class EnvironmentRepo
+    public interface IEnvironmentRepo
+    {
+        Task SaveEnvironment(EnvironmentItem environment);
+        Task<List<EnvironmentItem?>> ReadEnvironmentsAsync(string userName);
+        Task<EnvironmentItem?> ReadEnvironmentAsync(string userName, string worldName);
+        Task DeleteEnvironment(string WorldId);
+        Task<bool> CheckExits(string userName, string worldName);
+    }
+
+    public class EnvironmentRepo : IEnvironmentRepo
     {
         private readonly string _connectionString;
         private readonly ILogger<EnvironmentRepo> _logger;

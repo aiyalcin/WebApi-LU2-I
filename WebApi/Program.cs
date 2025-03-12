@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using WebApi.DataBase;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -29,6 +31,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
+
+builder.Services.AddTransient<IEnvironmentRepo, EnvironmentRepo>();
+
+
 
 var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(connStr);
 var app = builder.Build();
