@@ -37,7 +37,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.MapGet("/", () => $"The API is up .Connection string found: {(sqlConnectionStringFound ? "Yes" : "No")}");
+app.MapGet("/", () => $"The API is up. Connection string found: {(sqlConnectionStringFound ? "Yes" : "No")}");
 app.MapControllers();
 app.MapGroup("/account").MapIdentityApi<IdentityUser>();
 app.UseHttpsRedirection();
