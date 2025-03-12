@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.DataBase;
 using WebApi.Items;
 
 namespace WebApi.Controllers
