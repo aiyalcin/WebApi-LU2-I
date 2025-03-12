@@ -13,8 +13,7 @@ namespace WebApi.Controllers
     {
         private readonly string _connectionString;
         private readonly IEnvironmentRepo _environmentRepo;
-        private readonly ILogger<EnvironmentRepo> _logger;
-        public EnvironmentController(IEnvironmentRepo repo, ILogger<EnvironmentRepo> logger)
+        public EnvironmentController(IEnvironmentRepo repo)
         {
             _environmentRepo = repo; 
         }

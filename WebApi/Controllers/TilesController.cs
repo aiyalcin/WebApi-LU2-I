@@ -19,7 +19,7 @@ namespace WebApi.Controllers
             public List<Tile2DItem> Tiles { get; set; }
         }
 
-        public TilesController(ITilesRepo repo, ILogger<EnvironmentRepo> logger)
+        public TilesController(ITilesRepo repo)
         {
             _tilesRepo = repo;
         }
