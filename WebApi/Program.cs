@@ -4,10 +4,8 @@ using WebApi.DataBase;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddAuthorization();
 
-// Ensure secrets are added to the configuration
 builder.Configuration.AddUserSecrets<Program>();
 builder.Services.AddTransient<ITilesRepo, TilesRepo>();
 builder.Services.AddTransient<IEnvironmentRepo, EnvironmentRepo>();

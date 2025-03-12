@@ -21,7 +21,6 @@ namespace WebApi.Controllers
             public List<Tile2DItem> Tiles { get; set; }
         }
 
-        //get all tiles in an environment
         [HttpGet("{WorldId}")]
         public async Task<List<Tile2DItem?>> ReadTilesAsync(string WorldId)
         {
