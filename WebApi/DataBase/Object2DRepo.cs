@@ -9,7 +9,7 @@ namespace WebApi.DataBase
         private readonly string _connectionString;
         public Object2DRepo(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
+            _connectionString = configuration.GetValue<string>("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
         }
 
         public async Task SaveObject2D(List<Object2DItem> objects)

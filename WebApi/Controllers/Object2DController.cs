@@ -19,7 +19,7 @@ namespace WebApi.Controllers
         private List<Object2DItem> _object2DItems;
         public Object2DController(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
+            _connectionString = configuration.GetValue<string>("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
             _object2DRepo = new Object2DRepo(configuration);
         }
         public class Object2DItemList

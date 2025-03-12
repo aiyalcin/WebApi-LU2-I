@@ -16,7 +16,7 @@ namespace WebApi.Controllers
         private readonly ILogger<EnvironmentRepo> _logger;
         public EnvironmentController(IConfiguration configuration, ILogger<EnvironmentRepo> logger)
         {
-            _connectionString = configuration.GetConnectionString("ConnectionString1")
+            _connectionString = configuration.GetValue<string>("ConnectionString1")
                                 ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
             _environmentRepo = new EnvironmentRepo(configuration, logger);
         }

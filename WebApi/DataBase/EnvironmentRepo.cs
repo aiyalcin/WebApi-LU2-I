@@ -12,7 +12,7 @@ namespace WebApi.DataBase
         public EnvironmentRepo(IConfiguration configuration, ILogger<EnvironmentRepo> logger)
         {
             _logger = logger;
-            _connectionString = configuration.GetConnectionString("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
+            _connectionString = configuration.GetValue<string>("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
         }
         public async Task SaveEnvironment(EnvironmentItem environment)
         {

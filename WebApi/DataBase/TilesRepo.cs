@@ -12,7 +12,7 @@ namespace WebApi.DataBase
 
         public TilesRepo(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("ConnectionString1") ??
+            _connectionString = configuration.GetValue<string>("ConnectionString1") ??
                                 throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
         }
 

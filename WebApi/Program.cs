@@ -9,7 +9,7 @@ builder.Services.AddAuthorization();
 builder.Configuration.AddUserSecrets<Program>();
 
 // Retrieve the connection string securely
-string connStr = builder.Configuration.GetConnectionString("ConnectionString1");
+string connStr = builder.Configuration.GetValue<string>("ConnectionString1");
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
     {
@@ -29,8 +29,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
-var sqlConnectionString = builder.Configuration.GetValue<string>("ConnectionString1");
-var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(sqlConnectionString);
+
+var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(connStr);
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {

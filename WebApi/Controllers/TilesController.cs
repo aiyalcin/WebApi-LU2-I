@@ -22,7 +22,7 @@ namespace WebApi.Controllers
 
         public TilesController(IConfiguration configuration, ILogger<EnvironmentRepo> logger)
         {
-            _connectionString = configuration.GetConnectionString("ConnectionString1")
+            _connectionString = configuration.GetValue<string>("ConnectionString1")
                                 ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
             _environmentRepo = new EnvironmentRepo(configuration, logger);
             _tilesRepo = new TilesRepo(configuration);
