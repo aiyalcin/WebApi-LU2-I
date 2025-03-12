@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Testing.Platform.Logging;
+﻿using Microsoft.Testing.Platform.Logging;
 using Moq;
 using WebApi.Controllers;
 using WebApi.DataBase;
@@ -8,68 +7,72 @@ using WebApi.Items;
 namespace TestProjectWebApi
 {
     [TestClass]
-    public sealed class Test1
+    public class EnvironmentControllerTests
     {
-        [TestMethod]
-        public async Task ReadTilesAsync_ReturnsTiles()
+        private Mock<IEnvironmentRepo> _mockRepo;
+        private EnvironmentController _controller;
+
+        [TestInitialize]
+        public void Setup()
         {
-            // Arrange
-            var mockLogger = new Mock<ILogger<EnvironmentRepo>>();
-            var mockTilesRepo = new Mock<ITilesRepo>();
-            var worldId = "testWorldId";
-            var expectedTiles = new List<Tile2DItem?> { new Tile2DItem { Id = "1", TileName = "Tile1", PositionX = 0, PositionY = 0, WorldId = worldId } };
-
-            mockTilesRepo.Setup(repo => repo.ReadTilesAsync(worldId)).ReturnsAsync(expectedTiles);
-
-            var controller = new TilesController(mockLogger.Object);
-
-            // Act
-            var result = await controller.ReadTilesAsync(worldId);
-
-            // Assert
-            CollectionAssert.AreEqual(expectedTiles, result);
+            _mockRepo = new Mock<IEnvironmentRepo>();
+            _controller = new EnvironmentController(_mockRepo.Object);
         }
 
         [TestMethod]
-        public async Task SaveTiles_CallsSaveTilesOnRepo()
+        public async Task SaveEnvironment_CallsSaveEnvironmentOnRepo()
         {
             // Arrange
-            var mockConfiguration = new Mock<IConfiguration>();
-            var mockLogger = new Mock<ILogger<EnvironmentRepo>>();
-            var mockTilesRepo = new Mock<ITilesRepo>();
-            var tileList = new TilesController.Tile2DItemList
+            var environmentItem = new EnvironmentItem
             {
-                Tiles = new List<Tile2DItem> { new Tile2DItem { Id = "1", TileName = "Tile1", PositionX = 0, PositionY = 0, WorldId = "testWorldId" } }
+                WorldId = "1",
+                WorldName = "TestWorld",
+                Height = 100,
+                Width = 100,
+                Username = "test@example.com"
             };
 
-            var controller = new TilesController(mockConfiguration.Object, mockLogger.Object, mockTilesRepo.Object);
-
             // Act
-            await controller.SaveTiles(tileList);
+            await _controller.SaveEnvironment(environmentItem);
 
             // Assert
-            mockTilesRepo.Verify(repo => repo.SaveTiles(tileList.Tiles), Times.Once);
+            _mockRepo.Verify(repo => repo.SaveEnvironment(environmentItem), Times.Once);
         }
 
         [TestMethod]
-        public async Task ReadTilesAsync_ReturnsEmptyListWhenNoTiles()
+        public async Task CheckExits_ReturnsTrueIfExists()
         {
             // Arrange
-            var mockConfiguration = new Mock<IConfiguration>();
-            var mockLogger = new Mock<ILogger<EnvironmentRepo>>();
-            var mockTilesRepo = new Mock<ITilesRepo>();
-            var worldId = "testWorldId";
-            var expectedTiles = new List<Tile2DItem?>();
+            var email = "test@example.com";
+            var worldName = "TestWorld";
+            var exists = true;
 
-            mockTilesRepo.Setup(repo => repo.ReadTilesAsync(worldId)).ReturnsAsync(expectedTiles);
-
-            var controller = new TilesController(mockConfiguration.Object, mockLogger.Object);
+            _mockRepo.Setup(repo => repo.CheckExits(email, worldName)).ReturnsAsync(exists);
 
             // Act
-            var result = await controller.ReadTilesAsync(worldId);
+            var result = await _controller.CheckExits(email, worldName);
 
             // Assert
-            Assert.AreEqual(0, result.Count);
+            Assert.IsTrue(result);
         }
+
+        [TestMethod]
+        public async Task CheckExits_ReturnsFalseIfNotExists()
+        {
+            // Arrange
+            var email = "test@example.com";
+            var worldName = "NonExistentWorld";
+            var exists = false;
+
+            _mockRepo.Setup(repo => repo.CheckExits(email, worldName)).ReturnsAsync(exists);
+
+            // Act
+            var result = await _controller.CheckExits(email, worldName);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
     }
+
 }

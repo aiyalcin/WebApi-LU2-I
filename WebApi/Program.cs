@@ -17,8 +17,8 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
     {
         options.User.RequireUniqueEmail = true;
         options.Password.RequiredLength = 10;
-        options.Password.RequireDigit = false;
-        options.Password.RequireLowercase = false;
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequireUppercase = false;
 
