@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.DataBase;
 using WebApi.Items;
 
 namespace WebApi.Controllers
@@ -10,18 +9,15 @@ namespace WebApi.Controllers
     [Route("/tiles")]
     public class TilesController : Controller
     {
-        private readonly string _connectionString;
-        private readonly EnvironmentRepo _environmentRepo;
         private readonly ITilesRepo _tilesRepo;
-        private readonly ILogger<EnvironmentRepo> _logger;
-        public class Tile2DItemList
-        {
-            public List<Tile2DItem> Tiles { get; set; }
-        }
-
         public TilesController(ITilesRepo repo)
         {
             _tilesRepo = repo;
+        }
+
+        public class Tile2DItemList
+        {
+            public List<Tile2DItem> Tiles { get; set; }
         }
 
         //get all tiles in an environment

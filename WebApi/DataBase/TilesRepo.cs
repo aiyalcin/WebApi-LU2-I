@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using Dapper;
+﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using WebApi.Items;
 
@@ -17,8 +16,8 @@ namespace WebApi.DataBase
 
         public TilesRepo(IConfiguration configuration)
         {
-            _connectionString = configuration.GetValue<string>("ConnectionString1") ??
-                                throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
+            _connectionString = configuration.GetValue<string>("ConnectionString1") ?? throw new InvalidOperationException("Connection string 'ConnectionString' not found.");
+            WorldTiles = new List<Tile2DItem>();
         }
 
         public async Task<List<Tile2DItem?>> ReadTilesAsync(string WorldId)
@@ -84,8 +83,5 @@ namespace WebApi.DataBase
                 connection.Close();
             }
         }
-
-
-
     }
 }

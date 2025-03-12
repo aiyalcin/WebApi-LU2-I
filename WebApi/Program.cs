@@ -9,8 +9,10 @@ builder.Services.AddAuthorization();
 
 // Ensure secrets are added to the configuration
 builder.Configuration.AddUserSecrets<Program>();
+builder.Services.AddTransient<ITilesRepo, TilesRepo>();
+builder.Services.AddTransient<IEnvironmentRepo, EnvironmentRepo>();
+builder.Services.AddTransient<IObject2DRepo, Object2DRepo>();
 
-// Retrieve the connection string securely
 string connStr = builder.Configuration.GetValue<string>("ConnectionString1");
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
@@ -31,10 +33,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
-
-builder.Services.AddTransient<IEnvironmentRepo, EnvironmentRepo>();
-
-
 
 var sqlConnectionStringFound = !string.IsNullOrWhiteSpace(connStr);
 var app = builder.Build();

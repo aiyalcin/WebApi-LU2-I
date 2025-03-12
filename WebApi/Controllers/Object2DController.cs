@@ -1,11 +1,8 @@
-﻿using Dapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Data.SqlClient;
 using WebApi.DataBase;
 using WebApi.Items;
-using static WebApi.Controllers.TilesController;
+
 
 namespace WebApi.Controllers
 {
